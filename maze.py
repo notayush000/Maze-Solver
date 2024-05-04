@@ -1,9 +1,9 @@
 import os
 os.system('cls')
 
+import random
 import time
 from collections import deque
-import matplotlib.pyplot as plt
 
 
 def load_maze(file_path):
@@ -117,52 +117,27 @@ def ucs(maze, start, goal):
     return "Path not found", time.time() - start_time
 
 
-def print_path_on_maze(maze, path):
-    marked_maze = [list(row) for row in maze]
-    row, col = start
-
-    for action in path:
-        if action == 'Left':
-            marked_maze[row][col] = '+'
-            col -= 1
-        elif action == 'Right':
-            marked_maze[row][col] = '+'
-            col += 1
-        elif action == 'Up':
-            marked_maze[row][col] = '+'
-            row -= 1
-        elif action == 'Down':
-            marked_maze[row][col] = '+'
-            row += 1
-
-    for row in marked_maze:
-        print(" ".join(row))
-
-
 
 if __name__ == '__main__':
-    maze = load_maze("maze1.txt")
+    num = random.randint(1, 8)
+    path = os.path.join("mazes", f"maze{num}.txt")
+    print(f"Running on maze: ", path.split("\\")[-1])
+    maze = load_maze(path)
     start, goal = find_start_goal(maze)
 
     size = get_maze_size(maze)
+    
 
     bfs_path, bfs_time = bfs(maze, start, goal)
     print("BFS Path: ", bfs_path)
     print("BFS Running Time: ", bfs_time)
-    if bfs_path != "Path not found":
-        print("\nBFS Path on Maze:\n")
-        print_path_on_maze(maze, bfs_path)
+
 
     dfs_path, dfs_time = dfs(maze, start, goal)
     print("\nDFS Path:", dfs_path)
     print("DFS Running Time:", dfs_time)
-    if dfs_path != "Path not found":
-        print("\nDFS Path on Maze:\n")
-        print_path_on_maze(maze, dfs_path)
+
 
     ucs_path, ucs_time = ucs(maze, start, goal)
     print("\nUCS Path:", ucs_path)
     print("UCS Running Time:", ucs_time)
-    if ucs_path != "Path not found":
-        print("\nUCS Path on Maze:\n")
-        print_path_on_maze(maze, ucs_path)   
